@@ -1,4 +1,4 @@
-# $Id: Embed.pm,v 1.1 1996/07/21 23:33:03 dougm Exp $
+# $Id: Embed.pm,v 1.2 1996/11/27 21:18:13 dougm Exp $
 require 5.002;
 
 package ExtUtils::Embed;
@@ -17,7 +17,7 @@ use vars qw(@ISA @EXPORT $VERSION
 	    );
 use strict;
 
-$VERSION = sprintf("%d.%02d", q$Revision: 1.1 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 1.2 $ =~ /(\d+)\.(\d+)/);
 #for the namespace change
 $Devel::embed::VERSION = "99.99";
 
@@ -221,7 +221,7 @@ sub ccdlflags {
 }
 
 sub perl_inc {
-   print " -I $Config{archlib}/CORE ";
+   print " -I$Config{archlib}/CORE ";
 }
 
 sub ccopts {

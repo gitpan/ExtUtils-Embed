@@ -1,5 +1,5 @@
+Changes
 MANIFEST
-MANIFEST.SKIP
 Makefile.PL
 README
 eg/README
@@ -8,10 +8,13 @@ eg/interp.c
 eg/match.c
 eg/power.c
 eg/power.pl
+eg/regex.c
+eg/regex.pl
 eg/showtime.c
 eg/showtime.pl
 eg/string.c
-genmake.pl
+eg/uri-url.c
+genmake
 lib/ExtUtils/Embed.pm
 t/build.t
 t/embed.c

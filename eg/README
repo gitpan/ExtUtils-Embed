@@ -1,7 +1,7 @@
 This directory contains examples from the perlembed manpage.
-Simply type "build cfile"
-Where "cfile" is the name of any *.c file in this directory, minus the ".c"
-This shell script runs the same command used in the perlembed manpage examples.
+Simply type "perl build cfile"
+Where "cfile" is the name of any *.c file in this directory.
+This script runs the same command used in the perlembed manpage examples.
 
-You may also wish to build with "perl ../genmake.pl cfile; make" for linking the 
-xs_init function.
+You may also wish to build with "perl ../genmake cfile; make" for linking
+the xs_init function.
