@@ -1,0 +1,12 @@
+\bRCS\b
+\.bak$
+\bMakefile$
+~$
+^#
+\.old$
+^blib/
+^MakeMaker-\d
+\.o$
+embed$
+xsinit.c$
+\bpm_to_blib
