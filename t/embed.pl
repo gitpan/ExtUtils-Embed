@@ -6,7 +6,9 @@ sub test {
     print($true ? "ok $num $msg\n" : "not ok $num $msg\n");
 }
 
-@exts = ('DynaLoader', split(' ', $Config{static_ext}));
+@exts = grep(!$seen{$_}++,
+	     ('DynaLoader', split(' ', $Config{static_ext}),
+	      qw(Socket FileHandle Safe))); #try a few standard modules too
 
 printf "1..%d\n", scalar @exts;
 

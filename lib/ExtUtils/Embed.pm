@@ -1,7 +1,7 @@
-# $Id: embed.pm,v 1.18 1996/07/14 22:06:14 dougm Exp $
+# $Id: Embed.pm,v 1.1 1996/07/21 23:33:03 dougm Exp $
 require 5.002;
 
-package ExtUtils::embed;
+package ExtUtils::Embed;
 require Exporter;
 require FileHandle;
 use Config;
@@ -17,7 +17,7 @@ use vars qw(@ISA @EXPORT $VERSION
 	    );
 use strict;
 
-$VERSION = sprintf("%d.%02d", q$Revision: 1.18 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 1.1 $ =~ /(\d+)\.(\d+)/);
 #for the namespace change
 $Devel::embed::VERSION = "99.99";
 
@@ -25,7 +25,7 @@ sub Version { $VERSION; }
 
 @ISA = qw(Exporter);
 @EXPORT = qw(&xsinit &ldopts 
-	     &ccopts &ccflags &ccldflags &perl_inc
+	     &ccopts &ccflags &ccdlflags &perl_inc
 	     &xsi_header &xsi_protos &xsi_body);
 
 #let's have Miniperl borrow from us instead
@@ -246,24 +246,24 @@ __END__
 
 =head1 NAME
 
-ExtUtils::embed - Utilities for embedding Perl in C/C++ applications
+ExtUtils::Embed - Utilities for embedding Perl in C/C++ applications
 
 =head1 SYNOPSIS
 
 
- perl -MExtUtils::embed -e xsinit 
- perl -MExtUtils::embed -e ldopts 
+ perl -MExtUtils::Embed -e xsinit 
+ perl -MExtUtils::Embed -e ldopts 
 
 =head1 DESCRIPTION
 
-ExtUtils::embed provides utility functions for embedding a Perl interpreter
+ExtUtils::Embed provides utility functions for embedding a Perl interpreter
 and extensions in your C/C++ applications.  
-Typically, an application B<Makefile> will invoke ExtUtils::embed
+Typically, an application B<Makefile> will invoke ExtUtils::Embed
 functions while building your application.  
 
 =head1 @EXPORT
 
-ExtUtils::embed exports the following functions:
+ExtUtils::Embed exports the following functions:
  
 L<xsinit()>, L<ldopts()>, L<ccopts()>, L<perl_inc()>, L<ccflags()>, 
 L<ccdlflags()>, L<xsi_header()>, L<xsi_protos()>, L<xsi_body()>
@@ -274,7 +274,7 @@ L<ccdlflags()>, L<xsi_header()>, L<xsi_protos()>, L<xsi_body()>
 
 Generate C/C++ code for the XS intializer function.
 
-When invoked as C<`perl -MExtUtils::embed -e xsinit --`>
+When invoked as C<`perl -MExtUtils::Embed -e xsinit --`>
 the following options are recognized:
 
 B<-o> <output filename> (Defaults to B<perlxsi.c>)
@@ -301,7 +301,7 @@ B<[@modules]> is an array ref, same as additional arguments mentioned above.
 =item Examples
 
  
- perl -MExtUtils::embed -e xsinit -- -o xsinit.c Socket
+ perl -MExtUtils::Embed -e xsinit -- -o xsinit.c Socket
 
 
 This will generate code with an B<xs_init> function that glues the perl B<Socket::bootstrap> function 
@@ -309,7 +309,7 @@ to the C B<boot_Socket> function and writes it to a file named "xsinit.c".
 
 Note that B<DynaLoader> is a special case where it must call B<boot_DynaLoader> directly.
 
- perl -MExtUtils::embed -e xsinit
+ perl -MExtUtils::Embed -e xsinit
 
 
 This will generate code for linking with B<DynaLoader> and 
@@ -317,7 +317,7 @@ each static extension found in B<$Config{static_ext}>.
 The code is written to the default file name B<perlxsi.c>.
 
 
- perl -MExtUtils::embed -e xsinit -- -o xsinit.c -std DBI DBD::Oracle
+ perl -MExtUtils::Embed -e xsinit -- -o xsinit.c -std DBI DBD::Oracle
 
 
 Here, code is written for all the currently linked extensions along with code
@@ -331,7 +331,7 @@ other extensions.
 Output arguments for linking the Perl library and extensions to your
 application.
 
-When invoked as C<`perl -MExtUtils::embed -e ldopts --`>
+When invoked as C<`perl -MExtUtils::Embed -e ldopts --`>
 the following options are recognized:
 
 B<-std> 
@@ -381,7 +381,7 @@ rather than print it to STDOUT.
 =item Examples
 
 
- perl -MExtUtils::embed -e ldopts
+ perl -MExtUtils::Embed -e ldopts
 
 
 This will print arguments for linking with B<libperl.a>, B<DynaLoader> and 
@@ -393,20 +393,20 @@ In addition, when ModuleName.a is found, additional linker arguments
 are picked up from the B<extralibs.ld> file in the same directory.
 
 
- perl -MExtUtils::embed -e ldopts -- -std Socket
+ perl -MExtUtils::Embed -e ldopts -- -std Socket
  
 
 This will do the same as the above example, along with printing additional arguments for linking with the B<Socket> extension.
 
 
- perl -MExtUtils::embed -e ldopts -- DynaLoader
+ perl -MExtUtils::Embed -e ldopts -- DynaLoader
 
 
 This will print arguments for linking with just the B<DynaLoader> extension
 and B<libperl.a>.
 
 
- perl -MExtUtils::embed -e ldopts -- -std Msql -- -L/usr/msql/lib -lmsql
+ perl -MExtUtils::Embed -e ldopts -- -std Msql -- -L/usr/msql/lib -lmsql
 
 
 Any arguments after the second '--' token are additional linker
@@ -426,7 +426,7 @@ So, rather than having to say:
 
 Just say:
 
- perl -MExtUtils::embed -e perl_inc
+ perl -MExtUtils::Embed -e perl_inc
 
 =item ccflags(), ccdlflags()
 
@@ -454,7 +454,7 @@ B<xsinit()> uses the xsi_* functions to generate most of it's code.
 
 =head1 EXAMPLES
 
-For examples on how to use B<ExtUtils::embed> for building C/C++ applications
+For examples on how to use B<ExtUtils::Embed> for building C/C++ applications
 with embedded perl, see the eg/ directory and the I<perlembed> man page.
  
 =head1 SEE ALSO

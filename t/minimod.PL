@@ -22,7 +22,7 @@ print <<'END';
 
 package ExtUtils::Miniperl;
 require Exporter;
-use ExtUtils::embed qw(&xsi_protos &xsi_body);
+use ExtUtils::Embed qw(&xsi_protos &xsi_body);
 @ISA = qw(Exporter);
 @EXPORT = qw(&writemain);
 
@@ -94,7 +94,7 @@ deal with this module directly.
 
 =head1 SEE ALSO
 
-L<ExtUtils::MakeMaker>, L<ExtUtils::embed>
+L<ExtUtils::MakeMaker>, L<ExtUtils::Embed>
 
 =cut
 

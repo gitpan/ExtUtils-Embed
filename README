@@ -1,16 +1,24 @@
-ExtUtils::embed - Utilities for embedding Perl in C/C++ applications
+ExtUtils::Embed - Utilities for embedding Perl in C/C++ applications
 
 This library is free software; 
 you can redistribute it and/or modify it under the same terms as Perl itself. 
 
-ExtUtils::embed provides utility functions for embedding a Perl interpreter
+ExtUtils::Embed provides utility functions for embedding a Perl interpreter
 and extensions in your C/C++ applications.  
 
-Typically, an application Makefile will invoke ExtUtils::embed
+Typically, an application Makefile will invoke ExtUtils::Embed
 functions while building your application.  
 
 Changes:
 --------------------------
+v, 1.07, July 21, 1996
+
+o renamed to ExtUtils::Embed (last name change I swear!)
+  ExtUtils::Embed will be part of the standard Perl distribution
+  as of 5.003_01
+
+o fixed typo in @EXPORT
+
 v, 1.06, July 14, 1996
 
 o applied patch from Andreas Koenig <k@anna.in-berlin.de> to fix
