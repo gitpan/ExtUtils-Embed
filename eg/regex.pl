@@ -13,13 +13,13 @@ sub regex {
 
     #if we are trying to match something with m//  
     if($operation =~ m:^m:) {
-	eval "\@Matches = (\$string =~ $operation)";
+	eval "\@Matches = (\$\$string =~ $operation)";
 	$n = scalar @Matches;
     }
     else {
-	eval "\$n = (\$string =~ $operation)";
+	eval "\$n = (\$\$string =~ $operation)";
     }
-    return($n, $string);
+    return $n;
 }
 
 1;

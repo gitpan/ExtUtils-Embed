@@ -18,9 +18,18 @@ WriteMakefile(
 	LDOPTS => "$ldopts",
     },
     OBJECT => '$(NAME).$(OBJ_EXT) perlxsi.$(OBJ_EXT)',	      
+    clean => { FILES => "$name $name.o perlxsi.c perlxsi.o" },
 );
 
 package MY;
+
+#remove Makefile.PL dependency, since there isn't one!
+sub MY::makefile {
+    my $self = shift;
+    my $string = $self->MM::makefile;
+    $string =~ s/(Makefile.*:\s+)Makefile.PL(.*)/$1$2/s;
+    return $string;
+}
 
 sub MY::top_targets {
     my $self = shift;

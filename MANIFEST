@@ -6,10 +6,15 @@ eg/README
 eg/build
 eg/buildall
 eg/cleanall
+eg/testall
+eg/script.pl
 eg/call_anon.c
 eg/perl_eval_pv.c
+eg/hashref.c
+eg/hashref.pl
 eg/interp.c
 eg/match.c
+eg/orig-match.c
 eg/multiplicity.c
 eg/persistent.c
 eg/persistent.pl

@@ -1,3 +1,18 @@
+v, 1.13, July 17, 1997
+o added eg/testall script
+
+o added hashref.{c,pl} example
+
+o updated match.c with new version (kept old one as orig-match.c)
+
+o fixed bug in regex.c that showed up on linux
+
+o fixes bugs in power.c (my_argv) and uri-url.c (use "" not NULL)
+
+o we now install into $Config{privlibexp} since we ship with Perl
+
+o fixed genmake bugs introduced in 1.12_02
+
 v, 1.12_02, June 3, 1997
 
 o reworked genmake script to use MakeMaker so it'll work on Win32
