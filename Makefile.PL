@@ -2,7 +2,7 @@
 use ExtUtils::MakeMaker;
 use Config;
 
-$VERSION = "1.08";
+$VERSION = "1.09";
 
 print "Writing Makefile for ExtUtils::Embed tests...\n";
 

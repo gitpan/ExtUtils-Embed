@@ -5,3 +5,28 @@ This script runs the same command used in the perlembed manpage examples.
 
 You may also wish to build with "perl ../genmake cfile; make" for linking
 the xs_init function.
+
+Examples in this directory include:
+Jon Orwant's from the perlembed manpage:
+interp.c
+match.c
+power.c
+showtime.c
+string.c
+
+A few of mine from the December issue of The Perl Journal:
+uri-url.c
+regex.c
+
+For some real-life embedding examples see:
+
+o Apache mod_perl - http://www.perl.com/CPAN/modules/by-module/Apache/
+
+o nvi - http://www.perl.com/CPAN/src/misc/nvi-X.XX.tar.gz
+
+o trn - ???
+
+If you have any you'd like to add, let me <dougm@osf.org> know.
+
+Happy embedding,
+-Doug
