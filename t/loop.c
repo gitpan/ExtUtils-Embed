@@ -18,6 +18,7 @@ int main(int argc, char **argv, char **env)
 	perl_destruct(perl); 
 	perl_free(perl); 
     }
+    return 1;
 }
 
 

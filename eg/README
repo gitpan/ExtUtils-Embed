@@ -24,9 +24,17 @@ Some of mine from the perlembed manpage:
 persistent.c
 multiplicity.c
 
-A few of mine from the December issue of The Perl Journal:
+A few of mine from the December 96 issue of The Perl Journal:
 uri-url.c
 regex.c
+
+Others:
+call_anon.c: 
+/* this is an example of how to create and call 
+ * an anonymous subroutine in C.  Originally it did 
+ * the work of perl_eval_pv, which is now part of the 
+ * standard Perl API.  there still may be some use bits here...
+ */
 
 For some real-life embedding examples see:
 

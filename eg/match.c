@@ -1,11 +1,13 @@
 #include <EXTERN.h>
 #include <perl.h>
-static PerlInterpreter *my_perl;
 
-I32 perl_eval(char *string)
-{
-  return perl_eval_sv(newSVpv(string,0), G_DISCARD);
-}
+/* we'll do this until 5.004 final */
+#include "patchlevel.h"
+#if (PATCHLEVEL < 4) && (SUBVERSION < 98)
+#include "perl_eval_pv.c"
+#endif
+
+static PerlInterpreter *my_perl;
 
 /** match(string, pattern)
 **
@@ -20,7 +22,7 @@ char match(char *string, char *pattern)
   command = malloc(sizeof(char) * strlen(string) + strlen(pattern) + 37);
   sprintf(command, "$string = '%s'; $return = $string =~ %s",
 	  string, pattern);
-  perl_eval(command);
+  perl_eval_pv(command, TRUE);
   free(command);
   return SvIV(perl_get_sv("return", FALSE));
 }
@@ -40,7 +42,7 @@ int substitute(char *string[], char *pattern)
   command = malloc(sizeof(char) * strlen(*string) + strlen(pattern) + 35);
   sprintf(command, "$string = '%s'; $ret = ($string =~ %s)",
 	  *string, pattern);
-     perl_eval(command);
+     perl_eval_pv(command, TRUE);
      free(command);
      *string = SvPV(perl_get_sv("string", FALSE), length);
      return SvIV(perl_get_sv("ret", FALSE));
@@ -65,7 +67,7 @@ int matches(char *string, char *pattern, char **match_list[])
   command = malloc(sizeof(char) * strlen(string) + strlen(pattern) + 38);
   sprintf(command, "$string = '%s'; @array = ($string =~ %s)",
 	  string, pattern);
-  perl_eval(command);
+  perl_eval_pv(command, TRUE);
   free(command);
   array = perl_get_av("array", FALSE);
   num_matches = av_len(array) + 1; /** assume $[ is 0 **/

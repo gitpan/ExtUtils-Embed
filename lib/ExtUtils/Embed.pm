@@ -1,4 +1,4 @@
-# $Id: Embed.pm,v 1.25 1997/03/11 02:40:28 dougm Exp $
+# $Id: Embed.pm,v 1.2503 1997/05/01 22:44:41 dougm Exp $
 require 5.002;
 
 package ExtUtils::Embed;
@@ -17,7 +17,7 @@ use vars qw(@ISA @EXPORT $VERSION
 	    );
 use strict;
 
-$VERSION = sprintf("%d.%02d", q$Revision: 1.25 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 1.2503 $ =~ /(\d+)\.(\d+)/);
 #for the namespace change
 $Devel::embed::VERSION = "99.99";
 
@@ -114,8 +114,9 @@ sub xsi_body {
     my(@exts) = @_;
     my($pname,@retval,%seen);
     my($dl) = canon('/','DynaLoader');
+    push(@retval, "\tchar *file = __FILE__;\n");
     push(@retval, "\tdXSUB_SYS;\n") if $] > 5.002;
-    push(@retval, "\tchar *file = __FILE__;\n\n");
+    push(@retval, "\n");
 
     foreach $_ (@exts){
         my($pname) = canon('/', $_);
@@ -199,7 +200,7 @@ sub ldopts {
     }
     #print STDERR "\@potential_libs = @potential_libs\n";
 
-    my $libperl = (grep(/^(-lperl\w+)$/, @link_args))[0] || "-lperl";
+    my $libperl = (grep(/^-l\w*perl\w*$/, @link_args))[0] || "-lperl";
 
     my($extralibs, $bsloadlibs, $ldloadlibs, $ld_run_path) =
 	$MM->ext(join ' ', 
@@ -271,6 +272,8 @@ xsinit(), ldopts(), ccopts(), perl_inc(), ccflags(),
 ccdlflags(), xsi_header(), xsi_protos(), xsi_body()
 
 =head1 FUNCTIONS
+
+=over
 
 =item xsinit()
 
@@ -453,6 +456,8 @@ This function returns a string of calls to B<newXS()> that glue the module B<boo
 function to B<boot_ModuleName> for each @modules.
 
 B<xsinit()> uses the xsi_* functions to generate most of it's code.
+
+=back
 
 =head1 EXAMPLES
 

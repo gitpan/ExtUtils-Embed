@@ -6,6 +6,8 @@ eg/README
 eg/build
 eg/buildall
 eg/cleanall
+eg/call_anon.c
+eg/perl_eval_pv.c
 eg/interp.c
 eg/match.c
 eg/multiplicity.c
