@@ -1,4 +1,4 @@
-# $Id: Embed.pm,v 1.22 1997/01/30 00:37:09 dougm Exp $
+# $Id: Embed.pm,v 1.23 1997/02/24 01:31:03 dougm Exp $
 require 5.002;
 
 package ExtUtils::Embed;
@@ -17,14 +17,14 @@ use vars qw(@ISA @EXPORT $VERSION
 	    );
 use strict;
 
-$VERSION = sprintf("%d.%02d", q$Revision: 1.22 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 1.23 $ =~ /(\d+)\.(\d+)/);
 #for the namespace change
 $Devel::embed::VERSION = "99.99";
 
 sub Version { $VERSION; }
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&xsinit &ldopts 
+@EXPORT = qw(&xsinit &ldopts
 	     &ccopts &ccflags &ccdlflags &perl_inc
 	     &xsi_header &xsi_protos &xsi_body);
 
@@ -199,9 +199,11 @@ sub ldopts {
     }
     #print STDERR "\@potential_libs = @potential_libs\n";
 
+    my $libperl = (grep(/^(-l\w+perl)$/, @link_args))[0] || "-lperl";
+
     my($extralibs, $bsloadlibs, $ldloadlibs, $ld_run_path) =
 	$MM->ext(join ' ', 
-		 $MM->catdir("-L$Config{archlibexp}", "CORE"), " -lperl", 
+		 $MM->catdir("-L$Config{archlibexp}", "CORE"), " $libperl", 
 		 @potential_libs);
 
     my $ld_or_bs = $bsloadlibs || $ldloadlibs;

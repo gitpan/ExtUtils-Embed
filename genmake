@@ -3,6 +3,7 @@ use Config;
 #$makefile = "t/Makefile";
 $cfile = shift;
 $makefile = shift || "Makefile";
+$libperl = shift || "-lperl"; #might be -lmperl, etc.
 
 open(MAKEFILE, "> $makefile") || die "can't open '$makfile' $!";
 
@@ -12,8 +13,9 @@ print MAKEFILE <<"HEAD";
 RM = $Config{rm} -f
 CC = $Config{cc}
 PERL = $Config{perlpath}
-CFILE = $cfile
+NAME = $cfile
 STATIC_EXTS = -std $Config{static_ext}
+EXTRA_LINK_ARGS = $libperl
 
 HEAD
 
@@ -22,11 +24,11 @@ print MAKEFILE <<'EOM';
 EXTUTILS_EMBED = $(PERL)  -I../blib -I../lib -MExtUtils::Embed
 XS_INIT =  `$(EXTUTILS_EMBED) -e xsinit -- -o xsinit.c $(STATIC_EXTS)`
 CCOPTS = `$(EXTUTILS_EMBED) -e ccopts`
-LDOPTS = `$(EXTUTILS_EMBED) -e ldopts -- $(STATIC_EXTS)`
+LDOPTS = `$(EXTUTILS_EMBED) -e ldopts -- $(STATIC_EXTS) -- $(EXTRA_LINK_ARGS)`
 
-OBJS = xsinit.o $(CFILE).o
+OBJS = xsinit.o $(NAME).o
 
-all : $(CFILE)
+all : $(NAME)
 
 xsinit.c :
 	$(XS_INIT)
@@ -34,14 +36,14 @@ xsinit.c :
 xsinit.o :
 	$(CC) $(CCFLAGS) -c xsinit.c $(CCOPTS)
 
-$(CFILE).o : 
-	$(CC) $(CCFLAGS) -c $(CFILE).c $(CCOPTS)
+$(NAME).o : 
+	$(CC) $(CCFLAGS) -c $(NAME).c $(CCOPTS)
 
-$(CFILE) : xsinit.c $(OBJS)
+$(NAME) : xsinit.c $(OBJS)
 	$(CC) -o $@ $(OBJS) $(LDOPTS)
 
 clean : 
-	$(RM) *.o *~ *.bak xsinit.c embed
+	$(RM) *.o *~ *.bak xsinit.c $(NAME)
 
 EOM
 

@@ -1,2 +1,3 @@
 
-system("t/embed t/embed.pl");
+system "t/embed", "t/embed.pl";
+
