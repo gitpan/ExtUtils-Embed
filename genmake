@@ -1,10 +1,9 @@
-
+use strict;
 use Config;
 use ExtUtils::MakeMaker;
-use lib qw(/afs/ri/user/dougm/development/ExtUtils-Embed/lib);
-
-use strict;
+use lib qw(./lib);
 use ExtUtils::Embed;
+
 (my $name = shift) =~ s/\.c$//;
 my $makefile = shift || "Makefile";
 my $libperl = shift || ""; #might be -lperlm, etc.
