@@ -3,7 +3,7 @@ use Config;
 #$makefile = "t/Makefile";
 $cfile = shift;
 $makefile = shift || "Makefile";
-$libperl = shift || "-lperl"; #might be -lmperl, etc.
+$libperl = shift || "-lperl"; #might be -lperlm, etc.
 
 open(MAKEFILE, "> $makefile") || die "can't open '$makfile' $!";
 
@@ -23,7 +23,7 @@ print MAKEFILE <<'EOM';
 
 EXTUTILS_EMBED = $(PERL)  -I../blib -I../lib -MExtUtils::Embed
 XS_INIT =  `$(EXTUTILS_EMBED) -e xsinit -- -o xsinit.c $(STATIC_EXTS)`
-CCOPTS = `$(EXTUTILS_EMBED) -e ccopts`
+CCOPTS = `$(EXTUTILS_EMBED) -e ccopts` 
 LDOPTS = `$(EXTUTILS_EMBED) -e ldopts -- $(STATIC_EXTS) -- $(EXTRA_LINK_ARGS)`
 
 OBJS = xsinit.o $(NAME).o

@@ -2,18 +2,18 @@
 use ExtUtils::MakeMaker;
 use Config;
 
-$VERSION = "1.10_01";
+$VERSION = "1.11";
 
 print "Writing files for ExtUtils::Embed tests...\n";
 
 %libperl = ();
 @cprogs = qw(embed);
-push @cprogs, 'loop' if $] >= 5.00328;
+push @cprogs, 'loop' if $] >= 5.00393;
 
-if((-e "$Config{archlibexp}/CORE/libmperl.a") or $ENV{TEST_MULTIPLICITY}) {
+if((-e "$Config{archlibexp}/CORE/libperlm.a") or $ENV{TEST_MULTIPLICITY}) {
     push @cprogs, 'multiplicity';
     system "$Config{cp} -f ./eg/multiplicity.c ./t";
-    $libperl{multiplicity} = "-lmperl";
+    $libperl{multiplicity} = "-lperlm";
 }
 
 $tests = scalar @cprogs;

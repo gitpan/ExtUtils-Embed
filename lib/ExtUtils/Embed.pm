@@ -1,4 +1,4 @@
-# $Id: Embed.pm,v 1.23 1997/02/24 01:31:03 dougm Exp $
+# $Id: Embed.pm,v 1.25 1997/03/11 02:40:28 dougm Exp $
 require 5.002;
 
 package ExtUtils::Embed;
@@ -17,14 +17,14 @@ use vars qw(@ISA @EXPORT $VERSION
 	    );
 use strict;
 
-$VERSION = sprintf("%d.%02d", q$Revision: 1.23 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 1.25 $ =~ /(\d+)\.(\d+)/);
 #for the namespace change
 $Devel::embed::VERSION = "99.99";
 
 sub Version { $VERSION; }
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&xsinit &ldopts
+@EXPORT = qw(&xsinit &ldopts 
 	     &ccopts &ccflags &ccdlflags &perl_inc
 	     &xsi_header &xsi_protos &xsi_body);
 
@@ -199,7 +199,7 @@ sub ldopts {
     }
     #print STDERR "\@potential_libs = @potential_libs\n";
 
-    my $libperl = (grep(/^(-l\w+perl)$/, @link_args))[0] || "-lperl";
+    my $libperl = (grep(/^(-lperl\w+)$/, @link_args))[0] || "-lperl";
 
     my($extralibs, $bsloadlibs, $ldloadlibs, $ld_run_path) =
 	$MM->ext(join ' ', 
@@ -209,6 +209,7 @@ sub ldopts {
     my $ld_or_bs = $bsloadlibs || $ldloadlibs;
     print STDERR "bs: $bsloadlibs ** ld: $ldloadlibs" if $Verbose;
     my $linkage = "$Config{ccdlflags} $Config{ldflags} @archives $ld_or_bs";
+    print STDERR "ldopts: '$linkage'\n" if $Verbose;
 
     return $linkage if scalar @_;
     print "$linkage\n";
@@ -265,20 +266,20 @@ functions while building your application.
 =head1 @EXPORT
 
 ExtUtils::Embed exports the following functions:
- 
-L<xsinit()>, L<ldopts()>, L<ccopts()>, L<perl_inc()>, L<ccflags()>, 
-L<ccdlflags()>, L<xsi_header()>, L<xsi_protos()>, L<xsi_body()>
+
+xsinit(), ldopts(), ccopts(), perl_inc(), ccflags(), 
+ccdlflags(), xsi_header(), xsi_protos(), xsi_body()
 
 =head1 FUNCTIONS
 
 =item xsinit()
 
-Generate C/C++ code for the XS intializer function.
+Generate C/C++ code for the XS initializer function.
 
 When invoked as C<`perl -MExtUtils::Embed -e xsinit --`>
 the following options are recognized:
 
-B<-o> <output filename> (Defaults to B<perlxsi.c>)
+B<-o> E<lt>output filenameE<gt> (Defaults to B<perlxsi.c>)
 
 B<-o STDOUT> will print to STDOUT.
 
@@ -301,7 +302,7 @@ B<[@modules]> is an array ref, same as additional arguments mentioned above.
 
 =item Examples
 
- 
+
  perl -MExtUtils::Embed -e xsinit -- -o xsinit.c Socket
 
 
@@ -340,7 +341,7 @@ B<-std>
 Output arguments for linking the Perl library and any extensions linked
 with the current Perl.
 
-B<-I> <path1:path2>
+B<-I> E<lt>path1:path2E<gt>
 
 Search path for ModuleName.a archives.  
 Default path is B<@INC>.
@@ -355,7 +356,7 @@ we should find B<auto/DBD/Oracle/Oracle.a>
 Keep in mind, you can always supply B</my/own/path/ModuleName.a>
 as an additional linker argument.
 
-B<-->  <list of linker args>
+B<-->  E<lt>list of linker argsE<gt>
 
 Additional linker arguments to be considered.
 
@@ -395,7 +396,7 @@ are picked up from the B<extralibs.ld> file in the same directory.
 
 
  perl -MExtUtils::Embed -e ldopts -- -std Socket
- 
+
 
 This will do the same as the above example, along with printing additional arguments for linking with the B<Socket> extension.
 
@@ -456,24 +457,18 @@ B<xsinit()> uses the xsi_* functions to generate most of it's code.
 =head1 EXAMPLES
 
 For examples on how to use B<ExtUtils::Embed> for building C/C++ applications
-with embedded perl, see the eg/ directory and the I<perlembed> man page.
- 
+with embedded perl, see the eg/ directory and L<perlembed>.
+
 =head1 SEE ALSO
 
-the I<perlembed> man page
+L<perlembed>
 
 =head1 AUTHOR
 
-Doug MacEachern <dougm@osf.org>
+Doug MacEachern E<lt>F<dougm@osf.org>E<gt>
 
-Based on ideas from Tim Bunce <Tim.Bunce@ig.co.uk> and
-B<minimod.pl> by Andreas Koenig <k@anna.in-berlin.de> and Tim Bunce.
-
-=cut
-
-Bunce <Tim.Bunce@ig.co.uk> and
-B<minimod.pl> by Andreas Koenig <k@anna.in-berlin.de> and Tim Bunce.
+Based on ideas from Tim Bunce E<lt>F<Tim.Bunce@ig.co.uk>E<gt> and
+B<minimod.pl> by Andreas Koenig E<lt>F<k@anna.in-berlin.de>E<gt> and Tim Bunce.
 
 =cut
-
 

@@ -1,5 +1,13 @@
+v, 1.11, March 10, 1997  
 
-v, 1.10, January 29, 1996
+o extended test suite to test perl_destruct_level=1 with
+  a looping perl_alloc..perl_free, along with a MULTIPLICITY 
+  test. 	
+
+o extra linker args (after `--') may now include -lperl\w+ to
+  override -lperl with -lperlm, -lperld or some such
+
+v, 1.10, January 29, 1997
 
 o updated genmake to use re-worked ccopts/ldopts
 

@@ -68,9 +68,12 @@ sub eval_file {
     delete_package($package) if $delete;
 
     #take a look if you want
-    print Devel::Symdump->rnew($package)->as_string, $/;
+    #print Devel::Symdump->rnew($package)->as_string, $/;
 }
 
 1;
 
 __END__
+
+
+

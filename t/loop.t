@@ -1,4 +1,4 @@
-if($] < 5.00328) {
+if($] < 5.00393) {
     print "1..0\n";
     warn "skipping loops tests for Perl version $]\n";
     exit();
