@@ -11,7 +11,7 @@ $tests = 18;
 print "1..$tests\n";
 
 chdir "t" if -d "t";
-$p = "loop";
+$p = "./loop";
 
 sub test {
     my($num, $code) = @_;

@@ -1,4 +1,10 @@
+v, 1.14, July 24, 1997
+
+applied patch from Andreas Koenig for 'make test' in case '.' is not
+in your PATH
+
 v, 1.13, July 17, 1997
+
 o added eg/testall script
 
 o added hashref.{c,pl} example
