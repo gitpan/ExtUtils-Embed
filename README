@@ -11,6 +11,11 @@ functions while building your application.
 
 Changes:
 --------------------------
+v, 1.06, July 14, 1996
+
+o applied patch from Andreas Koenig <k@anna.in-berlin.de> to fix
+  bug with NeXT systems
+
 v, 1.05, July 2, 1996
 
 o Object for accessing MakeMaker methods now blessed into 'MY' class to avoid warnings

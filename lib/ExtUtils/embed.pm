@@ -1,4 +1,4 @@
-# $Id: embed.pm,v 1.17 1996/07/02 13:48:17 dougm Exp $
+# $Id: embed.pm,v 1.18 1996/07/14 22:06:14 dougm Exp $
 require 5.002;
 
 package ExtUtils::embed;
@@ -17,7 +17,7 @@ use vars qw(@ISA @EXPORT $VERSION
 	    );
 use strict;
 
-$VERSION = sprintf("%d.%02d", q$Revision: 1.17 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 1.18 $ =~ /(\d+)\.(\d+)/);
 #for the namespace change
 $Devel::embed::VERSION = "99.99";
 
@@ -149,6 +149,7 @@ sub ldopts {
     my($std,$mods,$link_args,$path) = @_;
     my(@mods,@link_args,@argv);
     my($dllib,$config_libs,@potential_libs,@path);
+    local($") = ' ' unless $" eq ' ';
     my $MM = bless {} => 'MY';
     if (scalar @_) {
        @link_args = @$link_args if $link_args;
@@ -203,8 +204,9 @@ sub ldopts {
 		 $MM->catdir("-L$Config{archlib}", "CORE"), " -lperl", 
 		 @potential_libs);
 
-    my $linkage = "$Config{ldflags} @archives $ldloadlibs";
-    print STDERR "ldopts: '$linkage'\n" if $Verbose;
+    my $ld_or_bs = $bsloadlibs || $ldloadlibs;
+    print STDERR "bs: $bsloadlibs ** ld: $ldloadlibs" if $Verbose;
+    my $linkage = "$Config{ldflags} @archives $ld_or_bs";
 
     return $linkage if scalar @_;
     print "$linkage\n";
