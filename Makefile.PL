@@ -2,10 +2,11 @@
 use ExtUtils::MakeMaker;
 use Config;
 
-$VERSION = "1.12";
+$VERSION = "1.12_02";
 
 print "Writing files for ExtUtils::Embed tests...\n";
 
+$make = $Config{make} || "make";
 %libperl = ();
 @cprogs = qw(embed);
 push @cprogs, 'loop' if $] >= 5.00393;
@@ -28,7 +29,7 @@ for (@cprogs) {
     system "$^X genmake $_ t/Makefile.$_ $libperl{$_}";
     print FH <<"EOF";
 #system "make -f Makefile.$_ clean";
-\$res = system("make -f Makefile.$_") == 0 ? "ok" : "not ok";
+\$res = system("$make -f Makefile.$_") == 0 ? "ok" : "not ok";
 print \$res, " ", ++\$test, "\\n";
 
 EOF

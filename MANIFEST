@@ -22,7 +22,10 @@ eg/showtime.pl
 eg/string.c
 eg/uri-url.c
 genmake
+lib/Embed/Persistent.pm
 lib/ExtUtils/Embed.pm
+t/persistent.pl
+t/sub.pl
 t/embed.c
 t/embed.pl
 t/embed.t

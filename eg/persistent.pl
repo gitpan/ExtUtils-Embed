@@ -3,7 +3,7 @@ package Embed::Persistent;
 use strict;
 use vars '%Cache';
 
-use Devel::Symdump ();
+#use Devel::Symdump ();
 
 sub valid_package_name {
     my($string) = @_;

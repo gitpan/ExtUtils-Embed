@@ -4,18 +4,23 @@ if($] < 5.00393) {
     exit();
 }
 
-print "1..18\n";
+$Is_Win32 = ($^O eq "MSWin32");
+$tests = 18;
+--$tests if $Is_Win32;
 
-$p = "t/loop";
+print "1..$tests\n";
+
+chdir "t" if -d "t";
+$p = "loop";
 
 sub test {
     my($num, $code) = @_;
     $pat = "ok $num.*" x 10;
-    $s = `$p -e '$code; print "ok $num"'`;
+    $s = `$p -e "$code; print qq{ok $num}"`;
     print "ok $num\n" if $s =~ /$pat/;
 }
 
-@n = split //, `$p -e 'print "."'`;
+@n = split //, `$p -e "print qq{.}"`;
 $n = 10;
 for (1..scalar @n) {
     print "ok $_\n";
@@ -23,7 +28,7 @@ for (1..scalar @n) {
 
 test ++$n, 'use FileHandle (); FileHandle->new;'; 
 
-test ++$n, <<'EOF';
+test ++$n, <<'EOF' unless $Is_Win32; #command shell can't deal
 package Scotch;
 @ISA = qw(Drink);
 package Drink;
@@ -42,14 +47,14 @@ for (qw{strict English}) {
 }
 
 #reset rs ok?
-test ++$n, 'die unless $/ eq "\\n"; $/="";';
+test ++$n, 'die unless $/ eq qq{\\n}; $/=undef;';
 
 test ++$n, 'die if ' . 
     join(' || ', 
     'defined $scalar',
     'defined @array',
-    'defined %hash')    .
-    ';$scalar++; @array = (1..3); %hash = (a=>1);';
+    'defined %hash ;')    .
+    '@array = (1..3); %hash = (a=>1);';
 
-printf "ok %d\n", ++$n if(`$p t/eval.test` =~ /ok 16\n1\.\.16/);
+printf "ok %d\n", ++$n if(`$p eval.test` =~ /ok 16\n1\.\.16/);
 

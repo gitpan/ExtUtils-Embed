@@ -1,50 +1,71 @@
+
 use Config;
+use ExtUtils::MakeMaker;
+use lib qw(/afs/ri/user/dougm/development/ExtUtils-Embed/lib);
 
-#$makefile = "t/Makefile";
-$cfile = shift;
-$makefile = shift || "Makefile";
-$libperl = shift || "-lperl"; #might be -lperlm, etc.
+use strict;
+use ExtUtils::Embed;
+(my $name = shift) =~ s/\.c$//;
+my $makefile = shift || "Makefile";
+my $libperl = shift || ""; #might be -lperlm, etc.
 
-open(MAKEFILE, "> $makefile") || die "can't open '$makfile' $!";
+my $ldopts = ldopts "-std", $Config{static_exts}, [$libperl];
 
-print MAKEFILE <<"HEAD";
-#ExtUtils::Embed test Makefile
+WriteMakefile(
+    NORECURS => 1,
+    NAME => $name,
+    MAKEFILE => $makefile,	      
+    macro => {
+	LDOPTS => "$ldopts",
+    },
+    OBJECT => '$(NAME).$(OBJ_EXT) perlxsi.$(OBJ_EXT)',	      
+);
 
-RM = $Config{rm} -f
-CC = $Config{cc}
-PERL = $Config{perlpath}
-NAME = $cfile
-STATIC_EXTS = -std $Config{static_ext}
-EXTRA_LINK_ARGS = $libperl
+package MY;
 
-HEAD
+sub MY::top_targets {
+    my $self = shift;
+    my $ret = $self->MM::top_targets;
+    my $name = $self->{NAME};
+    $ret =~ s/(all\s+::\s+)(.*)/$1 \$(NAME)/g;
 
-print MAKEFILE <<'EOM';
+    $ret .= <<'EOF';
 
-EXTUTILS_EMBED = $(PERL)  -I../blib -I../lib -MExtUtils::Embed
-XS_INIT =  `$(EXTUTILS_EMBED) -e xsinit -- -o xsinit.c $(STATIC_EXTS)`
-CCOPTS = `$(EXTUTILS_EMBED) -e ccopts` 
-LDOPTS = `$(EXTUTILS_EMBED) -e ldopts -- $(STATIC_EXTS) -- $(EXTRA_LINK_ARGS)`
+perlxsi.c :
+	$(FULLPERL) -MExtUtils::Embed -e xsinit
 
-OBJS = xsinit.o $(NAME).o
+EOF
 
-all : $(NAME)
+    if($^O eq "MSWin32") {
+	$ret .= <<'EOF';
 
-xsinit.c :
-	$(XS_INIT)
+LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
+ advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
+ odbccp32.lib /nologo /subsystem:console /incremental:no\
+ /pdb:"$(NAME).pdb" /machine:I386 /out:"$(NAME).exe" 
+LINK32_OBJS= \
+        "$(NAME).obj" \
+	"perlxsi.obj" \
+	"$(PERL_ARCHLIB)\CORE\perl.lib"
+
+$(NAME) : $(DEF_FILE) $(LINK32_OBJS)
+    $(LD) @<<
+  $(LINK32_FLAGS) $(LINK32_OBJS)
+<<
+
+EOF
+    }
+    else {
+    
+    $ret .= <<'EOF';
+
+$(NAME) :	perlxsi.o $(NAME).o
+	   $(CC) -o $(NAME) $(NAME).o perlxsi.o $(CCFLAGS) $(LDOPTS)
+
+EOF
  
-xsinit.o :
-	$(CC) $(CCFLAGS) -c xsinit.c $(CCOPTS)
+#    print $_;
+    }
 
-$(NAME).o : 
-	$(CC) $(CCFLAGS) -c $(NAME).c $(CCOPTS)
-
-$(NAME) : xsinit.c $(OBJS)
-	$(CC) -o $@ $(OBJS) $(LDOPTS)
-
-clean : 
-	$(RM) *.o *~ *.bak xsinit.c $(NAME)
-
-EOM
-
-close MAKEFILE;
+    return $ret;
+}

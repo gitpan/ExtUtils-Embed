@@ -1,3 +1,14 @@
+v, 1.12_02, June 3, 1997
+
+o reworked genmake script to use MakeMaker so it'll work on Win32
+
+o ldopts, ccopts and friends will print if $0 eq '-e' otherwise assume
+  they're being called as a subroutine and return the value instead
+  
+v, 1.12_01
+
+o added alpha module Embed::Persistent
+
 v, 1.12, May 1, 1997  
 
 o added call_anon example

@@ -2,7 +2,7 @@
 
 use strict;
 use vars qw(@Matches);
-use Devel::Peek;
+
 sub regex {
     my($string, $operation) = @_;
     my $n;
