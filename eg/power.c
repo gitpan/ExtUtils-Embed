@@ -1,7 +1,8 @@
-#include <stdio.h>
 #include <EXTERN.h>
 #include <perl.h>
+
 static PerlInterpreter *my_perl;
+
 static void
 PerlPower(int a, int b)
 {
@@ -20,6 +21,7 @@ PerlPower(int a, int b)
   FREETMPS;                       /* free that return value        */
   LEAVE;                       /* ...and the XPUSHed "mortal" args.*/
 }
+
 int main (int argc, char **argv, char **env)
 {
   char *my_argv[2];
@@ -28,6 +30,7 @@ int main (int argc, char **argv, char **env)
   my_argv[1] = (char *) malloc(10);
   sprintf(my_argv[1], "power.pl");
   perl_parse(my_perl, NULL, argc, my_argv, NULL);
+  perl_run(my_perl);
   PerlPower(3, 4);                      /*** Compute 3 ** 4 ***/
   perl_destruct(my_perl);
   perl_free(my_perl);

@@ -1,4 +1,21 @@
 
+v, 1.10, January 29, 1996
+
+o updated genmake to use re-worked ccopts/ldopts
+
+o $Config{ccdlflags} is now part of ldopts instead of ccopts
+
+o new scripts for building/cleaning examples
+
+o added new examples from perlembed updates:
+  eg/persistent.*
+  eg/multiplicity.c
+  eg/morethanonce.c
+
+o cleaned up existing examples to reflect recent perlembed changes
+
+o added pointer to INN and ePerl (eg/README)
+
 v, 1.09, November 29, 1996 
 
 o applied patchlet from Andreas Koenig to s/archlib/archlibexp/

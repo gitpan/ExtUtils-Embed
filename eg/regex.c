@@ -1,6 +1,6 @@
-#include <stdio.h>
 #include <EXTERN.h>
 #include <perl.h>
+
 static PerlInterpreter *my_perl;
 
 /** regex(string, operation)
@@ -10,6 +10,7 @@ static PerlInterpreter *my_perl;
 ** Returns the number of successful matches, and
 ** modifies the input string if there were any.
 **/
+void xs_init(void);
 static int regex(char *string[], char *operation)
 {
   int n;
@@ -48,7 +49,8 @@ main (int argc, char **argv, char **env)
   text = argv[1];
   my_perl = perl_alloc();
   perl_construct( my_perl );
-  perl_parse(my_perl, NULL, 2, embedding, NULL);
+  perl_parse(my_perl, xs_init, 2, embedding, NULL);
+  perl_run(my_perl);
   
   if(num_matches = regex(&text, "m/([a-z]{4,6})/gi")) {
     AV *array;
@@ -81,6 +83,7 @@ main (int argc, char **argv, char **env)
     printf("Sorry, can't replace Perl with C\n\n");
   } 
 
+  perl_destruct_level = 0;
   perl_destruct(my_perl);
   perl_free(my_perl);
 }

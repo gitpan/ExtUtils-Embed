@@ -4,8 +4,13 @@ Makefile.PL
 README
 eg/README
 eg/build
+eg/buildall
+eg/cleanall
 eg/interp.c
 eg/match.c
+eg/multiplicity.c
+eg/persistent.c
+eg/persistent.pl
 eg/power.c
 eg/power.pl
 eg/regex.c

@@ -1,7 +1,13 @@
-This directory contains examples from the perlembed manpage.
+
 Simply type "perl build cfile"
 Where "cfile" is the name of any *.c file in this directory.
 This script runs the same command used in the perlembed manpage examples.
+
+To build everything type "perl buildall"
+
+To clean up type "perl cleanall"
+
+There's no Makefile on purpose, that's left as an exercise or something.
 
 You may also wish to build with "perl ../genmake cfile; make" for linking
 the xs_init function.
@@ -14,6 +20,10 @@ power.c
 showtime.c
 string.c
 
+Some of mine from the perlembed manpage:
+persistent.c
+multiplicity.c
+
 A few of mine from the December issue of The Perl Journal:
 uri-url.c
 regex.c
@@ -23,6 +33,10 @@ For some real-life embedding examples see:
 o Apache mod_perl - http://www.perl.com/CPAN/modules/by-module/Apache/
 
 o nvi - http://www.perl.com/CPAN/src/misc/nvi-X.XX.tar.gz
+
+o inn - http://www.isc.org/isc/inn.html
+
+0 ePerl - http://www.engelschall.com/sw/eperl/
 
 o trn - ???
 

@@ -1,20 +1,19 @@
-#include <stdio.h>
 #include <EXTERN.h>
 #include <perl.h>
 static PerlInterpreter *my_perl;
-int perl_eval(char *string)
+
+I32 perl_eval(char *string)
 {
-  char *argv[2];
-  argv[0] = string;
-  argv[1] = NULL;
-  perl_call_argv("_eval_", 0, argv);
+  return perl_eval_sv(newSVpv(string,0), G_DISCARD);
 }
+
 /** match(string, pattern)
 **
 ** Used for matches in a scalar context.
 **
 ** Returns 1 if the match was successful; 0 otherwise.
 **/
+
 char match(char *string, char *pattern)
 {
   char *command;
@@ -25,6 +24,7 @@ char match(char *string, char *pattern)
   free(command);
   return SvIV(perl_get_sv("return", FALSE));
 }
+
 /** substitute(string, pattern)
 **
 ** Used for =~ operations that modify their left-hand side (s/// and tr///)
@@ -32,6 +32,7 @@ char match(char *string, char *pattern)
 ** Returns the number of successful matches, and
 ** modifies the input string if there were any.
 **/
+
 int substitute(char *string[], char *pattern)
 {
   char *command;
@@ -44,6 +45,7 @@ int substitute(char *string[], char *pattern)
      *string = SvPV(perl_get_sv("string", FALSE), length);
      return SvIV(perl_get_sv("ret", FALSE));
 }
+
 /** matches(string, pattern, matches)
 **
 ** Used for matches in an array context.
@@ -51,6 +53,7 @@ int substitute(char *string[], char *pattern)
 ** Returns the number of matches,
 ** and fills in **matches with the matching substrings (allocates memory!)
 **/
+
 int matches(char *string, char *pattern, char **match_list[])
 {
   char *command;
@@ -73,9 +76,10 @@ int matches(char *string, char *pattern, char **match_list[])
   }
   return num_matches;
 }
+
 main (int argc, char **argv, char **env)
 {
-  char *embedding[] = { "", "-e", "sub _eval_ { eval $_[0] }" };
+  char *embedding[] = { "", "-e", "0" };
   char *text, **match_list;
   int num_matches, i;
   int j;

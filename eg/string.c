@@ -1,22 +1,22 @@
-#include <stdio.h>
 #include <EXTERN.h>
 #include <perl.h>
+
 static PerlInterpreter *my_perl;
-int perl_eval(char *string)
+
+I32 perl_eval(char *string)
 {
-  char *argv[2];
-  argv[0] = string;
-  argv[1] = NULL;
-  perl_call_argv("_eval_", 0, argv);
+  return perl_eval_sv(newSVpv(string,0), G_DISCARD);
 }
+
 main (int argc, char **argv, char **env)
 {
-  char *embedding[] = { "", "-e", "sub _eval_ { eval $_[0] }" };
+  char *embedding[] = { "", "-e", "0" };
   STRLEN length;
   my_perl = perl_alloc();
   perl_construct( my_perl );
   perl_parse(my_perl, NULL, 3, embedding, NULL);
                                        /** Treat $a as an integer **/
+  perl_run(my_perl);
   perl_eval("$a = 3; $a **= 2");
   printf("a = %d\n", SvIV(perl_get_sv("a", FALSE)));
                                        /** Treat $a as a float **/

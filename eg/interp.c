@@ -6,10 +6,10 @@ miniperlmain.c, from the source distribution. Here's a bastardized, non-portable
 essentials of embedding: 
 */
 
-#include <stdio.h>
 #include <EXTERN.h>               /* from the Perl distribution     */
 #include <perl.h>                 /* from the Perl distribution     */
 static PerlInterpreter *my_perl;  /***    The Perl interpreter    ***/
+
 int main(int argc, char **argv, char **env)
 {
   my_perl = perl_alloc();
@@ -19,4 +19,6 @@ int main(int argc, char **argv, char **env)
   perl_destruct(my_perl);
   perl_free(my_perl);
 }
+
+
 
