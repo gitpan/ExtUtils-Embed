@@ -1,4 +1,4 @@
-Devel::embed - Utilities for embedding Perl in C/C++ applications
+ExtUtils::embed - Utilities for embedding Perl in C/C++ applications
 
 This library is free software; 
 you can redistribute it and/or modify it under the same terms as Perl itself. 
@@ -9,7 +9,13 @@ and extensions in your C/C++ applications.
 Typically, an application Makefile will invoke ExtUtils::embed
 functions while building your application.  
 
-v, 1.03, June X, 1996
+v, 1.04, June 17, 1996
+
+o Added perl_inc, ccflags, ccdlflags and ccopts functions
+
+o Added eg/ directory with examples from the perlembed manpage
+
+v, 1.03, June 10, 1996
 
 o Changed name from Devel::embed to ExtUtils::embed
 

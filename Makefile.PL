@@ -2,11 +2,11 @@
 use ExtUtils::MakeMaker;
 use Config;
 
-$VERSION = "1.03";
+$VERSION = "1.04";
 
 print "Writing Makefile for ExtUtils::embed tests...\n";
 
-system "$Config{perlpath} t/writetest.pl";
+system "$Config{perlpath} genmake.pl embed t/Makefile";
     
 WriteMakefile(
 	      VERSION   => $VERSION,

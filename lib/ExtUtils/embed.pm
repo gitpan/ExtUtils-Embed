@@ -1,4 +1,4 @@
-# $Id: embed.pm,v 1.14 1996/06/11 02:23:52 dougm Exp $
+# $Id: embed.pm,v 1.15 1996/06/17 20:34:14 dougm Exp $
 require 5.002;
 
 package ExtUtils::embed;
@@ -17,11 +17,16 @@ use vars qw(@ISA @EXPORT $VERSION
 	    );
 use strict;
 
-$VERSION = sprintf("%d.%02d", q$Revision: 1.14 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 1.15 $ =~ /(\d+)\.(\d+)/);
+#for the namespace change
+$Devel::embed::VERSION = "99.99";
+
 sub Version { $VERSION; }
 
 @ISA = qw(Exporter);
-@EXPORT = qw(xsinit ldopts xsi_header xsi_protos xsi_body);
+@EXPORT = qw(&xsinit &ldopts 
+	     &ccopts &ccflags &ccldflags &perl_inc
+	     &xsi_header &xsi_protos &xsi_body);
 
 #let's have Miniperl borrow from us instead
 #require ExtUtils::Miniperl;
@@ -173,7 +178,7 @@ sub ldopts {
 	@ns = split('::', $mod);
 	$sub = $ns[-1];
 	$root = $MM->catdir(@ns);
-
+	
 	print STDERR "searching for '$sub${lib_ext}'\n" if $Verbose;
 	foreach (@path) {
 	    next unless -e ($archive = $MM->catdir($_,"auto",$root,"$sub$lib_ext"));
@@ -182,7 +187,7 @@ sub ldopts {
 		local(*FH); 
 		if(open(FH, $extra)) {
 		    my($libs) = <FH>; chomp $libs;
-		    push @potential_libs, $libs;
+		    push @potential_libs, split /\s+/, $libs;
 		}
 		else {  
 		    warn "Couldn't open '$extra'"; 
@@ -191,6 +196,7 @@ sub ldopts {
 	    last;
 	}
     }
+    #print STDERR "\@potential_libs = @potential_libs\n";
 
     my($extralibs, $bsloadlibs, $ldloadlibs, $ld_run_path) =
 	$MM->ext(join ' ', 
@@ -202,6 +208,24 @@ sub ldopts {
 
     return $linkage if scalar @_;
     print "$linkage\n";
+}
+
+sub ccflags {
+   print " $Config{ccflags} ";
+}
+
+sub ccdlflags {
+   print " $Config{ccdlflags} ";
+}
+
+sub perl_inc {
+   print " -I $Config{archlib}/CORE ";
+}
+
+sub ccopts {
+   ccflags;
+   ccdlflags;
+   perl_inc;
 }
 
 sub canon {
@@ -239,7 +263,8 @@ functions while building your application.
 
 ExtUtils::embed exports the following functions:
  
-B<xsinit()>, B<ldopts()>, B<xsi_header()>, B<xsi_protos()>, B<xsi_body()>
+B<xsinit()>, B<ldopts()>, B<ccopts()>, B<perl_inc>, B<ccflags>, B<ccdlflags>
+B<xsi_header()>, B<xsi_protos()>, B<xsi_body()>
 
 =head1 FUNCTIONS
 
@@ -386,6 +411,29 @@ Any arguments after the second '--' token are additional linker
 arguments that will be examined for potential conflict.  If there is no
 conflict, the additional arguments will be part of the output.  
 
+
+=head2 perl_inc()
+
+For including perl header files this function simply prints:
+
+ -I $Config{archlib}/CORE  
+
+So, rather than having to say:
+
+ perl -MConfig -e 'print "-I $Config{archlib}/CORE"'
+
+Just say:
+
+ perl -MExtUtils::embed -e perl_inc
+
+=head2 ccflags(), ccdlflags()
+
+These functions simply print $Config{ccflags} and $Config{ccdlflags}
+
+=head2 ccopts()
+
+This function combines perl_inc(), ccflags() and ccdlflags() into one.
+
 =head2 xsi_header()
 
 This function simply returns a string defining the same B<EXTERN_C> macro as
@@ -402,6 +450,11 @@ function to B<boot_ModuleName> for each @modules.
 
 B<xsinit()> uses the xsi_* functions to generate most of it's code.
 
+=head1 EXAMPLES
+
+For examples on how to use B<ExtUtils::embed> for building C/C++ applications
+with embedded perl, see the eg/ directory and the I<perlembed> man page.
+ 
 =head1 SEE ALSO
 
 the I<perlembed> man page
