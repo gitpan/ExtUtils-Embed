@@ -9,6 +9,14 @@ and extensions in your C/C++ applications.
 Typically, an application Makefile will invoke ExtUtils::embed
 functions while building your application.  
 
+Changes:
+--------------------------
+v, 1.05, July 2, 1996
+
+o Object for accessing MakeMaker methods now blessed into 'MY' class to avoid warnings
+
+o Updated documentation a bit
+
 v, 1.04, June 17, 1996
 
 o Added perl_inc, ccflags, ccdlflags and ccopts functions

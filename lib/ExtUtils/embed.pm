@@ -1,4 +1,4 @@
-# $Id: embed.pm,v 1.15 1996/06/17 20:34:14 dougm Exp $
+# $Id: embed.pm,v 1.17 1996/07/02 13:48:17 dougm Exp $
 require 5.002;
 
 package ExtUtils::embed;
@@ -17,7 +17,7 @@ use vars qw(@ISA @EXPORT $VERSION
 	    );
 use strict;
 
-$VERSION = sprintf("%d.%02d", q$Revision: 1.15 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 1.17 $ =~ /(\d+)\.(\d+)/);
 #for the namespace change
 $Devel::embed::VERSION = "99.99";
 
@@ -148,8 +148,8 @@ sub ldopts {
     require ExtUtils::Liblist;
     my($std,$mods,$link_args,$path) = @_;
     my(@mods,@link_args,@argv);
-    my($dllib,$config_libs,@potential_libs,$path,@path);
-    my $MM = new ExtUtils::MakeMaker;
+    my($dllib,$config_libs,@potential_libs,@path);
+    my $MM = bless {} => 'MY';
     if (scalar @_) {
        @link_args = @$link_args if $link_args;
        @mods = @$mods if $mods;
@@ -250,7 +250,7 @@ ExtUtils::embed - Utilities for embedding Perl in C/C++ applications
 
 
  perl -MExtUtils::embed -e xsinit 
-
+ perl -MExtUtils::embed -e ldopts 
 
 =head1 DESCRIPTION
 
@@ -263,12 +263,12 @@ functions while building your application.
 
 ExtUtils::embed exports the following functions:
  
-B<xsinit()>, B<ldopts()>, B<ccopts()>, B<perl_inc>, B<ccflags>, B<ccdlflags>
-B<xsi_header()>, B<xsi_protos()>, B<xsi_body()>
+L<xsinit()>, L<ldopts()>, L<ccopts()>, L<perl_inc()>, L<ccflags()>, 
+L<ccdlflags()>, L<xsi_header()>, L<xsi_protos()>, L<xsi_body()>
 
 =head1 FUNCTIONS
 
-=head2 xsinit()
+=item xsinit()
 
 Generate C/C++ code for the XS intializer function.
 
@@ -296,7 +296,7 @@ B<$std> is boolean, equivalent to the B<-std> option.
 
 B<[@modules]> is an array ref, same as additional arguments mentioned above.
 
-=head2 Examples
+=item Examples
 
  
  perl -MExtUtils::embed -e xsinit -- -o xsinit.c Socket
@@ -324,7 +324,7 @@ for B<DBI> and B<DBD::Oracle>.
 If you have a working B<DynaLoader> then there is rarely any need to statically link in any 
 other extensions.
 
-=head2 ldopts()
+=item ldopts()
 
 Output arguments for linking the Perl library and extensions to your
 application.
@@ -376,7 +376,7 @@ B<$path> is equivalent to the B<-I> option.
 In addition, when ldopts is called with parameters, it will return the argument string
 rather than print it to STDOUT.
 
-=head2 Examples
+=item Examples
 
 
  perl -MExtUtils::embed -e ldopts
@@ -412,7 +412,7 @@ arguments that will be examined for potential conflict.  If there is no
 conflict, the additional arguments will be part of the output.  
 
 
-=head2 perl_inc()
+=item perl_inc()
 
 For including perl header files this function simply prints:
 
@@ -426,24 +426,24 @@ Just say:
 
  perl -MExtUtils::embed -e perl_inc
 
-=head2 ccflags(), ccdlflags()
+=item ccflags(), ccdlflags()
 
 These functions simply print $Config{ccflags} and $Config{ccdlflags}
 
-=head2 ccopts()
+=item ccopts()
 
 This function combines perl_inc(), ccflags() and ccdlflags() into one.
 
-=head2 xsi_header()
+=item xsi_header()
 
 This function simply returns a string defining the same B<EXTERN_C> macro as
 B<perlmain.c> along with #including B<perl.h> and B<EXTERN.h>.  
 
-=head2 xsi_protos(@modules)
+=item xsi_protos(@modules)
 
 This function returns a string of B<boot_$ModuleName> prototypes for each @modules.
 
-=head2 xsi_body(@modules)
+=item xsi_body(@modules)
 
 This function returns a string of calls to B<newXS()> that glue the module B<bootstrap>
 function to B<boot_ModuleName> for each @modules.
@@ -467,4 +467,10 @@ Based on ideas from Tim Bunce <Tim.Bunce@ig.co.uk> and
 B<minimod.pl> by Andreas Koenig <k@anna.in-berlin.de> and Tim Bunce.
 
 =cut
+
+Bunce <Tim.Bunce@ig.co.uk> and
+B<minimod.pl> by Andreas Koenig <k@anna.in-berlin.de> and Tim Bunce.
+
+=cut
+
 

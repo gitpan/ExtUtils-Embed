@@ -15,6 +15,3 @@ foreach $module (@exts) {
 
     test ++$i, ! $@, $@;
 }
-
-
-
